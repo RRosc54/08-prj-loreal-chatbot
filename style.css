@@ -3,7 +3,6 @@
    ======================================== */
 
 :root {
-  /* L'Oréal-inspired color palette */
   --brand-red: #e30613;
   --brand-red-dark: #b8000b;
   --brand-red-light: #fff1f2;
@@ -18,13 +17,6 @@
   --error: #8b1e1e;
   --error-background: #fff3f3;
 
-  /*
-    Inter is used as a free alternative to
-    Helvetica Now Display.
-
-    Cormorant Garamond creates the refined serif
-    appearance used for editorial-style headings.
-  */
   --body-font:
     "Inter",
     "Helvetica Neue",
@@ -39,9 +31,7 @@
     serif;
 }
 
-/* ========================================
-   Basic Reset
-   ======================================== */
+/* Basic reset */
 
 * {
   box-sizing: border-box;
@@ -56,6 +46,7 @@ html {
 body {
   min-height: 100vh;
   color: var(--black);
+
   background:
     linear-gradient(
       135deg,
@@ -63,7 +54,9 @@ body {
       rgba(255, 255, 255, 0.4)
     ),
     var(--soft-gray);
+
   font-family: var(--body-font);
+
   display: flex;
   justify-content: center;
 }
@@ -82,9 +75,7 @@ button {
   max-width: 960px;
 }
 
-/* ========================================
-   Header and Branding
-   ======================================== */
+/* Header */
 
 .site-header {
   padding: 50px 20px 25px;
@@ -122,13 +113,10 @@ button {
   margin: 0 auto;
   color: var(--medium-gray);
   font-size: 15px;
-  font-weight: 400;
   line-height: 1.7;
 }
 
-/* ========================================
-   Chat Container
-   ======================================== */
+/* Chat container */
 
 .chatbox {
   margin: 20px 0 50px;
@@ -143,6 +131,7 @@ button {
   padding: 22px 25px;
   color: var(--white);
   background: var(--black);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -163,6 +152,7 @@ button {
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
+
   display: flex;
   align-items: center;
   gap: 9px;
@@ -176,9 +166,7 @@ button {
   box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.25);
 }
 
-/* ========================================
-   New Chat Button
-   ======================================== */
+/* New chat button */
 
 .clear-chat-button {
   padding: 9px 12px;
@@ -187,9 +175,11 @@ button {
   border: 1px solid #555555;
   border-radius: 2px;
   cursor: pointer;
+
   display: flex;
   align-items: center;
   gap: 6px;
+
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
@@ -216,9 +206,7 @@ button {
   outline-offset: 3px;
 }
 
-/* ========================================
-   Latest Question Display
-   ======================================== */
+/* Latest question */
 
 .latest-question-box {
   margin: 20px 22px 0;
@@ -244,14 +232,13 @@ button {
   line-height: 1.5;
 }
 
-/* ========================================
-   Chat Window
-   ======================================== */
+/* Chat window */
 
 .chat-window {
   height: 440px;
   padding: 25px;
   overflow-y: auto;
+
   background:
     linear-gradient(
       rgba(255, 255, 255, 0.95),
@@ -262,13 +249,13 @@ button {
       var(--brand-red-light),
       transparent 55%
     );
+
   display: flex;
   flex-direction: column;
   gap: 18px;
+
   scroll-behavior: smooth;
 }
-
-/* Scrollbar */
 
 .chat-window::-webkit-scrollbar {
   width: 9px;
@@ -284,12 +271,11 @@ button {
   border-radius: 10px;
 }
 
-/* ========================================
-   Message Rows and Chat Bubbles
-   ======================================== */
+/* Message rows */
 
 .message-row {
   width: 100%;
+
   display: flex;
   align-items: flex-end;
   gap: 10px;
@@ -307,15 +293,20 @@ button {
   width: 35px;
   height: 35px;
   flex: 0 0 35px;
+
   color: var(--white);
   background: var(--black);
   border: 2px solid var(--brand-red);
   border-radius: 50%;
+
   font-size: 13px;
   font-weight: 700;
+
   display: grid;
   place-items: center;
 }
+
+/* Message bubbles */
 
 .msg {
   max-width: 76%;
@@ -338,8 +329,6 @@ button {
   white-space: pre-wrap;
 }
 
-/* User Bubble */
-
 .msg.user {
   color: var(--white);
   background: var(--black);
@@ -349,8 +338,6 @@ button {
 .msg.user strong {
   color: #ffb6bb;
 }
-
-/* Assistant Bubble */
 
 .msg.assistant {
   color: var(--dark-gray);
@@ -364,21 +351,18 @@ button {
   color: var(--brand-red);
 }
 
-/* Error Bubble */
-
 .msg.error-message {
   color: var(--error);
   background: var(--error-background);
   border-color: #d8aaaa;
 }
 
-/* ========================================
-   Typing Indicator
-   ======================================== */
+/* Typing indicator */
 
 .typing-indicator {
   min-width: 75px;
   min-height: 20px;
+
   display: flex;
   align-items: center;
   gap: 5px;
@@ -414,14 +398,13 @@ button {
   }
 }
 
-/* ========================================
-   Chat Input Form
-   ======================================== */
+/* Input form */
 
 .chat-form {
   padding: 18px 22px 10px;
   background: var(--white);
   border-top: 1px solid var(--light-gray);
+
   display: flex;
   gap: 12px;
 }
@@ -429,12 +412,14 @@ button {
 .chat-form input {
   min-width: 0;
   flex: 1;
+
   padding: 14px 16px;
   color: var(--black);
   background: var(--soft-gray);
   border: 1px solid transparent;
   border-radius: 2px;
   font-size: 15px;
+
   transition:
     border-color 0.2s ease,
     background 0.2s ease,
@@ -461,14 +446,17 @@ button {
   width: 52px;
   height: 52px;
   flex: 0 0 52px;
+
   color: var(--white);
   background: var(--black);
   border: none;
   border-radius: 2px;
   cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   transition:
     background 0.2s ease,
     transform 0.2s ease;
@@ -501,9 +489,7 @@ button {
   line-height: 1.5;
 }
 
-/* ========================================
-   Accessibility
-   ======================================== */
+/* Accessibility */
 
 .visually-hidden {
   position: absolute;
@@ -517,9 +503,7 @@ button {
   clip: rect(0, 0, 0, 0);
 }
 
-/* ========================================
-   Footer
-   ======================================== */
+/* Footer */
 
 .site-footer {
   margin: 50px 0 40px;
@@ -532,6 +516,7 @@ button {
 
 .site-footer nav {
   margin-top: 12px;
+
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -549,14 +534,7 @@ button {
   text-decoration: underline;
 }
 
-.site-footer a:focus-visible {
-  outline: 2px solid var(--brand-red);
-  outline-offset: 3px;
-}
-
-/* ========================================
-   Responsive Design
-   ======================================== */
+/* Mobile */
 
 @media (max-width: 650px) {
   .page-wrapper {

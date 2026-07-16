@@ -4,12 +4,8 @@
    Configuration
    ======================================== */
 
-/*
-  Replace this URL after deploying your
-  Cloudflare Worker.
-*/
 const WORKER_URL =
-  "https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev";
+  "https://08-prj-loreal-chatbot-api.tut47132.workers.dev";
 
 const STORAGE_KEY = "loreal-chat-history";
 const MAX_HISTORY_MESSAGES = 12;
@@ -18,27 +14,37 @@ const MAX_HISTORY_MESSAGES = 12;
    DOM Elements
    ======================================== */
 
-const chatForm = document.getElementById("chatForm");
-const userInput = document.getElementById("userInput");
-const chatWindow = document.getElementById("chatWindow");
-const sendBtn = document.getElementById("sendBtn");
-const clearChatBtn = document.getElementById(
-  "clearChatBtn"
-);
+const chatForm =
+  document.getElementById("chatForm");
 
-const latestQuestionBox = document.getElementById(
-  "latestQuestionBox"
-);
+const userInput =
+  document.getElementById("userInput");
 
-const latestQuestionText = document.getElementById(
-  "latestQuestionText"
-);
+const chatWindow =
+  document.getElementById("chatWindow");
+
+const sendBtn =
+  document.getElementById("sendBtn");
+
+const clearChatBtn =
+  document.getElementById("clearChatBtn");
+
+const latestQuestionBox =
+  document.getElementById(
+    "latestQuestionBox"
+  );
+
+const latestQuestionText =
+  document.getElementById(
+    "latestQuestionText"
+  );
 
 /* ========================================
    Conversation State
    ======================================== */
 
-let conversationHistory = loadConversationHistory();
+let conversationHistory =
+  loadConversationHistory();
 
 /* ========================================
    Initial Setup
@@ -57,13 +63,14 @@ clearChatBtn.addEventListener(
 );
 
 /* ========================================
-   Form Submission
+   Submit Message
    ======================================== */
 
 async function handleFormSubmit(event) {
   event.preventDefault();
 
-  const question = userInput.value.trim();
+  const question =
+    userInput.value.trim();
 
   if (!question) {
     return;
@@ -80,22 +87,24 @@ async function handleFormSubmit(event) {
   userInput.value = "";
   setLoadingState(true);
 
-  const typingMessage = appendTypingIndicator();
+  const typingMessage =
+    appendTypingIndicator();
 
   try {
-    validateWorkerURL();
+    const response =
+      await fetch(WORKER_URL, {
+        method: "POST",
 
-    const response = await fetch(WORKER_URL, {
-      method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
 
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        messages: conversationHistory
-      })
-    });
+        body: JSON.stringify({
+          messages:
+            conversationHistory
+        })
+      });
 
     let data;
 
@@ -114,7 +123,8 @@ async function handleFormSubmit(event) {
       );
     }
 
-    const assistantReply = data.reply?.trim();
+    const assistantReply =
+      data.reply?.trim();
 
     if (!assistantReply) {
       throw new Error(
@@ -142,7 +152,9 @@ async function handleFormSubmit(event) {
     typingMessage.remove();
 
     appendMessage(
-      createFriendlyErrorMessage(error),
+      createFriendlyErrorMessage(
+        error
+      ),
       "assistant",
       true
     );
@@ -159,7 +171,9 @@ async function handleFormSubmit(event) {
 function initializeChat() {
   chatWindow.innerHTML = "";
 
-  if (conversationHistory.length === 0) {
+  if (
+    conversationHistory.length === 0
+  ) {
     appendMessage(
       "👋 Welcome to the L'Oréal Smart Routine & Product Advisor! Tell me about your skin, hair, makeup, or fragrance goals, and I'll help you build a personalized routine.",
       "assistant"
@@ -171,12 +185,14 @@ function initializeChat() {
     return;
   }
 
-  conversationHistory.forEach((message) => {
-    appendMessage(
-      message.content,
-      message.role
-    );
-  });
+  conversationHistory.forEach(
+    (message) => {
+      appendMessage(
+        message.content,
+        message.role
+      );
+    }
+  );
 
   const mostRecentUserMessage =
     [...conversationHistory]
@@ -202,7 +218,9 @@ function initializeChat() {
 function loadConversationHistory() {
   try {
     const savedHistory =
-      sessionStorage.getItem(STORAGE_KEY);
+      sessionStorage.getItem(
+        STORAGE_KEY
+      );
 
     if (!savedHistory) {
       return [];
@@ -211,13 +229,17 @@ function loadConversationHistory() {
     const parsedHistory =
       JSON.parse(savedHistory);
 
-    if (!Array.isArray(parsedHistory)) {
+    if (
+      !Array.isArray(parsedHistory)
+    ) {
       return [];
     }
 
     return parsedHistory
       .filter(isValidHistoryMessage)
-      .slice(-MAX_HISTORY_MESSAGES);
+      .slice(
+        -MAX_HISTORY_MESSAGES
+      );
   } catch (error) {
     console.warn(
       "Could not load chat history:",
@@ -232,7 +254,9 @@ function saveConversationHistory() {
   try {
     sessionStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(conversationHistory)
+      JSON.stringify(
+        conversationHistory
+      )
     );
   } catch (error) {
     console.warn(
@@ -242,8 +266,12 @@ function saveConversationHistory() {
   }
 }
 
-function addMessageToHistory(message) {
-  conversationHistory.push(message);
+function addMessageToHistory(
+  message
+) {
+  conversationHistory.push(
+    message
+  );
 
   if (
     conversationHistory.length >
@@ -254,13 +282,9 @@ function addMessageToHistory(message) {
         -MAX_HISTORY_MESSAGES
       );
 
-    /*
-      Avoid beginning the shortened history
-      with an assistant response.
-    */
     if (
-      conversationHistory[0]?.role ===
-      "assistant"
+      conversationHistory[0]
+        ?.role === "assistant"
     ) {
       conversationHistory.shift();
     }
@@ -269,15 +293,19 @@ function addMessageToHistory(message) {
   saveConversationHistory();
 }
 
-function isValidHistoryMessage(message) {
+function isValidHistoryMessage(
+  message
+) {
   return (
     message &&
     (
       message.role === "user" ||
       message.role === "assistant"
     ) &&
-    typeof message.content === "string" &&
-    message.content.trim().length > 0
+    typeof message.content ===
+      "string" &&
+    message.content.trim().length >
+      0
   );
 }
 
@@ -295,14 +323,16 @@ function clearConversation() {
     );
   }
 
-  latestQuestionText.textContent = "";
+  latestQuestionText.textContent =
+    "";
+
   latestQuestionBox.hidden = true;
 
   initializeChat();
 }
 
 /* ========================================
-   Message Display
+   Display Messages
    ======================================== */
 
 function appendMessage(
@@ -330,11 +360,15 @@ function appendMessage(
 
     avatar.textContent = "L";
 
-    messageRow.appendChild(avatar);
+    messageRow.appendChild(
+      avatar
+    );
   }
 
   const messageBubble =
-    document.createElement("article");
+    document.createElement(
+      "article"
+    );
 
   messageBubble.className =
     `msg ${role}`;
@@ -346,7 +380,9 @@ function appendMessage(
   }
 
   const speakerLabel =
-    document.createElement("strong");
+    document.createElement(
+      "strong"
+    );
 
   speakerLabel.textContent =
     role === "user"
@@ -356,10 +392,6 @@ function appendMessage(
   const messageText =
     document.createElement("p");
 
-  /*
-    textContent prevents the user's input or
-    AI response from being treated as HTML.
-  */
   messageText.textContent = text;
 
   messageBubble.append(
@@ -385,7 +417,7 @@ function appendTypingIndicator() {
     document.createElement("div");
 
   messageRow.className =
-    "message-row assistant typing-message-row";
+    "message-row assistant";
 
   const avatar =
     document.createElement("div");
@@ -401,13 +433,17 @@ function appendTypingIndicator() {
   avatar.textContent = "L";
 
   const messageBubble =
-    document.createElement("article");
+    document.createElement(
+      "article"
+    );
 
   messageBubble.className =
     "msg assistant";
 
   const speakerLabel =
-    document.createElement("strong");
+    document.createElement(
+      "strong"
+    );
 
   speakerLabel.textContent =
     "L'ORÉAL BEAUTY ADVISOR";
@@ -423,11 +459,19 @@ function appendTypingIndicator() {
     "Advisor is typing"
   );
 
-  for (let i = 0; i < 3; i += 1) {
+  for (
+    let i = 0;
+    i < 3;
+    i += 1
+  ) {
     const dot =
-      document.createElement("span");
+      document.createElement(
+        "span"
+      );
 
-    typingIndicator.appendChild(dot);
+    typingIndicator.appendChild(
+      dot
+    );
   }
 
   messageBubble.append(
@@ -449,7 +493,9 @@ function appendTypingIndicator() {
   return messageRow;
 }
 
-function displayLatestQuestion(question) {
+function displayLatestQuestion(
+  question
+) {
   latestQuestionText.textContent =
     question;
 
@@ -464,10 +510,12 @@ function scrollChatToBottom() {
 }
 
 /* ========================================
-   Loading State
+   Loading and Errors
    ======================================== */
 
-function setLoadingState(isLoading) {
+function setLoadingState(
+  isLoading
+) {
   userInput.disabled = isLoading;
   sendBtn.disabled = isLoading;
 
@@ -491,40 +539,14 @@ function setLoadingState(isLoading) {
   }
 }
 
-/* ========================================
-   Error Handling
-   ======================================== */
-
-function validateWorkerURL() {
-  const hasPlaceholder =
-    WORKER_URL.includes(
-      "YOUR-WORKER-NAME"
-    ) ||
-    WORKER_URL.includes(
-      "YOUR-SUBDOMAIN"
-    );
-
-  if (!WORKER_URL || hasPlaceholder) {
-    throw new Error(
-      "Add your deployed Cloudflare Worker URL near the top of script.js."
-    );
-  }
-}
-
-function createFriendlyErrorMessage(error) {
+function createFriendlyErrorMessage(
+  error
+) {
   const message =
     error?.message || "";
 
   const lowercaseMessage =
     message.toLowerCase();
-
-  if (
-    message.includes(
-      "Cloudflare Worker URL"
-    )
-  ) {
-    return `Setup needed: ${message}`;
-  }
 
   if (
     lowercaseMessage.includes(
@@ -545,7 +567,7 @@ function createFriendlyErrorMessage(error) {
       "billing"
     )
   ) {
-    return "The OpenAI account may not have available API credits. Check the account's billing and usage settings.";
+    return "The OpenAI account may not have available API credits. Check the API billing and usage settings.";
   }
 
   if (
@@ -553,7 +575,7 @@ function createFriendlyErrorMessage(error) {
       "failed to fetch"
     )
   ) {
-    return "I couldn't reach the Cloudflare Worker. Check the Worker URL, deployment status, and CORS settings.";
+    return "I couldn't reach the Cloudflare Worker. Check that it is deployed and that the Worker URL is correct.";
   }
 
   return (
